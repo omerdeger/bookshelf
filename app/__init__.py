@@ -1,19 +1,18 @@
-from flask import Flask, render_template
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
+        SQLALCHEMY_DATABASE_URI='sqlite:///site.db'
     )
 
-    @app.route('/')
-    def index():
-        return '''
-        <a href="/auth">Auth</a>
-        <a href="/bookshelf">Bookshelf</a>
-        '''
+    db.init_app(app)
+
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     
@@ -22,5 +21,8 @@ def create_app(test_config=None):
     
     from .bookshelf import bookshelf as bookshelf_blueprint
     app.register_blueprint(bookshelf_blueprint, url_prefix='/bookshelf')
+    
+    from .api import api as api_blueprint
+    app.register_blueprint(api_blueprint, url_prefix='/api')
 
     return app

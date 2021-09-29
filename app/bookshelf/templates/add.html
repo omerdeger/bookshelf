@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row g-5 justify-content-md-center">
+  <h3 class="py-3 text-center">Kitap Ekleme Formu</h3>
+    <ul>
+      {% for error in form.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  <div class="col-md-6 col-lg-4">
+    <form method="POST">
+      {{ form.csrf_token }}
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        <label for="bookName" class="form-label">{{ form.name.label }}</label>
+        {{ form.name(class="form-control") }}
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">{{ form.description.label }}</label>
+        {{ form.description(class="form-control") }}
+      </div>
+      {{ form.submit(class="btn btn-primary") }}
+    </form>
+  </div>
+
+  <div class="col-md-6 col-lg-4 order-md-last">
+    <img class="img-fluid border rounded-3 shadow-lg mb-4" src="{{ url_for('bookshelf.static', filename='default-book.png') }}" alt="">
+  </div>
+</div>
+{% endblock %}

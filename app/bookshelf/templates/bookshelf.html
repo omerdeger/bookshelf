@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block title %}{{title}} {% endblock %}
+{% block content %}
+<!-- Eğer Kitaplık yoksa -->
+{% if bookshelf == [] %}
+<div class="wrapper">
+  <div class="page-wrapper">
+    <div class="page-body">
+      <div class="container-xl d-flex flex-column justify-content-center">
+        <div class="empty">
+          <div class="empty-img">
+            <img
+              src="{{ url_for('static', filename='img/library.svg') }}"
+              height="128"
+              alt=""
+            />
+          </div>
+          <p class="empty-subtitle text-muted">
+            Henüz bir kitaplığın yok. Hadi bir tane oluşturalım.
+          </p>
+          <div class="empty-action">
+            <a href="./." class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookShelfModal">
+              <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              İlk kitaplığını oluştur
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include '_addBookshelfModal.html'%}
+
+{% else %}
+<!-- Kitaplıklar -->
+<div class="page-body">
+<div class="my-3 text-end">
+  <a href="./." class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookShelfModal">
+    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="icon"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+    Kitaplık Ekle
+  </a>
+</div>
+
+  <div class="container-xl">
+    <div class="row row-cards">
+      <div class="col-12">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table table-vcenter table-mobile-md card-table">
+              <thead>
+                <tr>
+                  <th>Kitaplık Adı</th>
+                  <th>Açıklama</th>
+                  <th>Renk</th>
+                  <th class="w-1"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for bookshelf in bookshelfs %}
+                <tr>
+                  <td data-label="Name">
+                    <div class="d-flex py-1 align-items-center">
+                      <span class="avatar me-2 bg-{{ bookshelf.bookshelfcolor }}" style="background-image: url(./static/avatars/010m.jpg)"></span>
+                      <div class="flex-fill">
+                        <div class="font-weight-medium"><a href="{{ bookshelf.id }}">{{ bookshelf.title }}</a></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td data-label="Title">
+                    <div class="text-muted"> {{ bookshelf.description }} </div>
+                  </td>
+                  <td class="text-muted" data-label="Role">
+                    {{ bookshelf.bookshelfcolor }}
+                  </td>
+                  <td>
+                    <div class="btn-list flex-nowrap">        
+                      <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" bookshelf_id="{{ bookshelf.id }}">
+                        Sil
+                      </button>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">
+                          Actions
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                          <a class="dropdown-item" href="#">
+                            Action
+                          </a>
+                          <a class="dropdown-item" href="#">
+                            Another action
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include '_addBookshelfModal.html'%}
+
+{% endif %}
+{% endblock %}
